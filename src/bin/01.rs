@@ -1,5 +1,19 @@
 pub fn part_one(input: &str) -> Option<u32> {
-    let total_calories = input
+    input_to_total_calories_collection(input)
+        .iter()
+        .max()
+        .copied()
+}
+
+pub fn part_two(input: &str) -> Option<u32> {
+    let mut total_calories = input_to_total_calories_collection(input);
+    total_calories.sort_by(|a, b| b.cmp(a));
+    let first_three: u32 = total_calories.iter().take(3).sum();
+    return Some(first_three);
+}
+
+fn input_to_total_calories_collection(input: &str) -> Vec<u32> {
+    input
         .trim()
         .split("\n\n")
         .map(|chunk| {
@@ -8,13 +22,7 @@ pub fn part_one(input: &str) -> Option<u32> {
                 .map(|calories_str| calories_str.trim().parse::<u32>().unwrap_or(0))
                 .sum()
         })
-        .collect::<Vec<_>>();
-
-    total_calories.iter().max().copied()
-}
-
-pub fn part_two(input: &str) -> Option<u32> {
-    None
+        .collect::<Vec<_>>()
 }
 
 fn main() {
@@ -75,8 +83,34 @@ mod tests {
     }
 
     #[test]
-    fn test_part_two() {
-        let input = advent_of_code::read_file("examples", 1);
-        assert_eq!(part_two(&input), None);
+    fn test_part_two_sums_top_three_elves() {
+        let input = "1000
+
+100
+100
+700
+
+1200
+100
+
+1400
+
+100";
+        assert_eq!(part_two(&input), Some(3700));
+    }
+
+    #[test]
+    fn test_part_two_less_than_three_inputs() {
+        let input = "100
+
+            200
+            400";
+        assert_eq!(part_two(&input), Some(700));
+    }
+
+    #[test]
+    fn test_part_two_works_with_one_bucket_of_calories() {
+        let input = "100";
+        assert_eq!(part_two(&input), Some(100));
     }
 }
