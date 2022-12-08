@@ -9,7 +9,7 @@ pub fn part_two(input: &str) -> Option<u32> {
     let mut total_calories = input_to_total_calories_collection(input);
     total_calories.sort_by(|a, b| b.cmp(a));
     let first_three: u32 = total_calories.iter().take(3).sum();
-    return Some(first_three);
+    Some(first_three)
 }
 
 fn input_to_total_calories_collection(input: &str) -> Vec<u32> {
